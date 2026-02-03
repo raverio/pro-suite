@@ -1,0 +1,111 @@
+<style>
+    .tool-wrapper { background: var(--bg-card); border-radius: 16px; padding: 24px; border: 1px solid var(--border); }
+    .manual-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; }
+    
+    /* Editor Side */
+    .editor-section { display: flex; flex-direction: column; gap: 15px; }
+    .input-group label { display: block; font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; }
+    .input-group input, .input-group textarea { 
+        width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 14px; 
+    }
+    textarea { height: 80px; resize: none; }
+
+    /* Preview Side */
+    .preview-phone {
+        background: #1e293b; padding: 15px; border-radius: 40px; 
+        width: 320px; height: 600px; margin: 0 auto; border: 8px solid #334155;
+        position: relative; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+    }
+    .phone-screen {
+        background: white; width: 100%; height: 100%; border-radius: 25px;
+        overflow-y: auto; display: flex; flex-direction: column;
+    }
+    .phone-header { background: var(--accent); color: white; padding: 25px 15px; text-align: center; }
+    .phone-header h4 { margin: 0; font-size: 18px; }
+    .phone-content { padding: 15px; }
+    .info-card { 
+        background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; 
+        border-radius: 12px; margin-bottom: 15px; 
+    }
+    .info-card h5 { margin: 0 0 5px; color: var(--accent); font-size: 12px; text-transform: uppercase; }
+    .info-card p { margin: 0; font-size: 13px; color: var(--text-main); line-height: 1.5; white-space: pre-wrap; }
+
+    .print-hint { 
+        margin-top: 20px; text-align: center; font-size: 12px; color: var(--text-muted);
+        background: #f1f5f9; padding: 10px; border-radius: 8px;
+    }
+
+    @media (max-width: 800px) { .manual-grid { grid-template-columns: 1fr; } }
+</style>
+
+<div class="tool-wrapper">
+    <div class="manual-grid">
+        <div class="editor-section">
+            <div class="input-group">
+                <label>Property Name</label>
+                <input type="text" id="propName" placeholder="e.g. The Blue Beachfront Suite" oninput="syncManual()">
+            </div>
+            <div class="input-group">
+                <label>Check-in Instructions</label>
+                <textarea id="checkIn" placeholder="e.g. Use code 1234 on the front door keypad. Turn handle right." oninput="syncManual()"></textarea>
+            </div>
+            <div class="input-group">
+                <label>House Rules</label>
+                <textarea id="rules" placeholder="e.g. No smoking inside. Quiet hours after 10 PM. Please take off shoes." oninput="syncManual()"></textarea>
+            </div>
+            <div class="input-group">
+                <label>Emergency Contact</label>
+                <input type="text" id="contact" placeholder="e.g. Host: +1 (555) 000-1111" oninput="syncManual()">
+            </div>
+            <div class="print-hint">
+                💡 <b>Tip:</b> This view shows how guests will see it on their mobile phones. You can print this as a PDF to send to them!
+            </div>
+        </div>
+
+        <div class="preview-section">
+            <div class="preview-phone">
+                <div class="phone-screen">
+                    <div class="phone-header">
+                        <h4 id="view-propName">Guest Welcome Guide</h4>
+                    </div>
+                    <div class="phone-content">
+                        <div class="info-card">
+                            <h5>🔑 Access & Check-In</h5>
+                            <p id="view-checkIn">Enter your check-in details on the left...</p>
+                        </div>
+                        <div class="info-card">
+                            <h5>📜 House Rules</h5>
+                            <p id="view-rules">List your rules to ensure a smooth stay.</p>
+                        </div>
+                        <div class="info-card">
+                            <h5>📞 Support</h5>
+                            <p id="view-contact">Contact info goes here.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function syncManual() {
+        const fields = ['propName', 'checkIn', 'rules', 'contact'];
+        fields.forEach(field => {
+            const val = document.getElementById(field).value;
+            const display = document.getElementById('view-' + field);
+            if (val.trim() !== "") {
+                display.innerText = val;
+            } else {
+                // Default placeholders
+                const defaults = {
+                    propName: 'Guest Welcome Guide',
+                    checkIn: 'Enter details on the left...',
+                    rules: 'List rules for a smooth stay.',
+                    contact: 'Contact info goes here.'
+                };
+                display.innerText = defaults[field];
+            }
+        });
+    }
+</script>
