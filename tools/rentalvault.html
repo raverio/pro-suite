@@ -1,0 +1,91 @@
+<style>
+    .tool-wrapper { background: var(--bg-card); border-radius: 16px; padding: 24px; border: 1px solid var(--border); }
+    .vault-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid var(--bg-site); padding-bottom: 15px; }
+    
+    .inventory-section { display: flex; flex-direction: column; gap: 12px; }
+    .item-row { 
+        display: grid; grid-template-columns: 2fr 1fr 1fr 40px; gap: 10px; 
+        background: var(--bg-site); padding: 12px; border-radius: 10px; align-items: center;
+    }
+    
+    input, select { 
+        padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 13px; 
+    }
+
+    .status-pill { font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 4px 8px; border-radius: 4px; text-align: center; }
+    .status-good { background: #dcfce7; color: #166534; }
+    .status-warn { background: #fef9c3; color: #854d0e; }
+
+    .add-btn { 
+        background: var(--success); color: white; border: none; padding: 10px; 
+        border-radius: 8px; cursor: pointer; font-weight: 600; margin-top: 15px; width: 100%;
+    }
+    
+    .summary-bar { 
+        margin-top: 25px; padding: 15px; background: var(--primary); color: white; 
+        border-radius: 12px; display: flex; justify-content: space-around; text-align: center;
+    }
+    .summary-item span { display: block; font-size: 18px; font-weight: 700; }
+    .summary-item label { font-size: 10px; opacity: 0.7; text-transform: uppercase; }
+
+    .delete-btn { color: #ef4444; border: none; background: none; cursor: pointer; font-weight: bold; }
+</style>
+
+<div class="tool-wrapper">
+    <div class="vault-header">
+        <h3 style="margin:0;">RentalVault | Inventory Log</h3>
+        <input type="text" id="roomName" placeholder="Room Name (e.g. Master Suite)" style="width:200px;">
+    </div>
+
+    <div id="inventoryList" class="inventory-section">
+        </div>
+
+    <button class="add-btn" onclick="addItem()">+ Add Item to Inventory</button>
+
+    <div class="summary-bar">
+        <div class="summary-item">
+            <span id="totalItems">0</span>
+            <label>Total Items</label>
+        </div>
+        <div class="summary-item">
+            <span id="totalValue">$0</span>
+            <label>Est. Value</label>
+        </div>
+    </div>
+</div>
+
+<script>
+    function addItem() {
+        const container = document.getElementById('inventoryList');
+        const row = document.createElement('div');
+        row.className = 'item-row';
+        row.innerHTML = `
+            <input type="text" placeholder="Item name (e.g. Smart TV)" class="item-name" oninput="updateVault()">
+            <input type="number" placeholder="Value $" class="item-val" oninput="updateVault()">
+            <select onchange="updateVault()" class="item-status">
+                <option value="Good">Good</option>
+                <option value="Fair">Fair</option>
+                <option value="Replace">Replace</option>
+            </select>
+            <button class="delete-btn" onclick="this.parentElement.remove(); updateVault();">×</button>
+        `;
+        container.appendChild(row);
+        updateVault();
+    }
+
+    function updateVault() {
+        const names = document.querySelectorAll('.item-name');
+        const values = document.querySelectorAll('.item-val');
+        let totalVal = 0;
+        
+        values.forEach(v => {
+            totalVal += parseFloat(v.value) || 0;
+        });
+
+        document.getElementById('totalItems').innerText = names.length;
+        document.getElementById('totalValue').innerText = '$' + totalVal.toLocaleString();
+    }
+
+    // Start with one row
+    addItem();
+</script>
