@@ -1,0 +1,104 @@
+<style>
+    .tool-wrapper { background: var(--bg-card); border-radius: 16px; padding: 24px; border: 1px solid var(--border); }
+    .margin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+    
+    .input-pane { background: var(--bg-site); padding: 20px; border-radius: 12px; border: 1px solid var(--border); }
+    .input-group { margin-bottom: 15px; }
+    .input-group label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; }
+    .input-group input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-weight: 600; }
+
+    .result-pane { display: flex; flex-direction: column; gap: 15px; }
+    .score-card { 
+        padding: 25px; border-radius: 16px; text-align: center; color: white;
+        background: var(--primary); box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .score-card h4 { margin: 0; font-size: 12px; opacity: 0.8; text-transform: uppercase; }
+    .score-card .val { font-size: 42px; font-weight: 800; margin: 10px 0; }
+    
+    .breakdown-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .breakdown-row b { color: var(--primary); }
+
+    .profitable { color: var(--success) !important; }
+    .loss { color: #ef4444 !important; }
+</style>
+
+<div class="tool-wrapper">
+    <div class="margin-grid">
+        <div class="input-pane">
+            <div class="input-group">
+                <label>Selling Price ($)</label>
+                <input type="number" id="sellPrice" value="50" oninput="calcMargin()">
+            </div>
+            <div class="input-group">
+                <label>Cost of Goods ($)</label>
+                <input type="number" id="costGoods" value="15" oninput="calcMargin()">
+            </div>
+            <div class="input-group">
+                <label>Platform Fee (%)</label>
+                <input type="number" id="platFee" value="15" oninput="calcMargin()">
+            </div>
+            <div class="input-group">
+                <label>Shipping & Misc ($)</label>
+                <input type="number" id="shipCost" value="8" oninput="calcMargin()">
+            </div>
+        </div>
+
+        <div class="result-pane">
+            <div class="score-card" id="cardBg">
+                <h4>Net Profit Margin</h4>
+                <div class="val" id="marginVal">0%</div>
+                <div id="statusText" style="font-size:12px; font-weight:600;">HEALTHY</div>
+            </div>
+
+            <div style="margin-top:10px;">
+                <div class="breakdown-row">
+                    <span>Gross Profit:</span>
+                    <b id="grossProf">$0</b>
+                </div>
+                <div class="breakdown-row">
+                    <span>Platform Fees:</span>
+                    <b id="feesPaid">$0</b>
+                </div>
+                <div class="breakdown-row">
+                    <span>Net Profit:</span>
+                    <b id="netProf" class="profitable">$0</b>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function calcMargin() {
+        const price = parseFloat(document.getElementById('sellPrice').value) || 0;
+        const cost = parseFloat(document.getElementById('costGoods').value) || 0;
+        const feePerc = parseFloat(document.getElementById('platFee').value) || 0;
+        const ship = parseFloat(document.getElementById('shipCost').value) || 0;
+
+        const fees = price * (feePerc / 100);
+        const gross = price - cost;
+        const net = price - cost - fees - ship;
+        const margin = price > 0 ? (net / price) * 100 : 0;
+
+        document.getElementById('grossProf').innerText = '$' + gross.toFixed(2);
+        document.getElementById('feesPaid').innerText = '$' + fees.toFixed(2);
+        document.getElementById('netProf').innerText = '$' + net.toFixed(2);
+        document.getElementById('marginVal').innerText = Math.round(margin) + '%';
+
+        const card = document.getElementById('cardBg');
+        const status = document.getElementById('statusText');
+        const netText = document.getElementById('netProf');
+
+        if (margin > 20) {
+            card.style.background = '#10b981'; status.innerText = 'HIGH PROFIT';
+            netText.className = 'profitable';
+        } else if (margin > 0) {
+            card.style.background = '#2563eb'; status.innerText = 'HEALTHY';
+            netText.className = 'profitable';
+        } else {
+            card.style.background = '#ef4444'; status.innerText = 'WARNING: LOSS';
+            netText.className = 'loss';
+        }
+    }
+    calcMargin();
+</script>
