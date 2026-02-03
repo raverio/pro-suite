@@ -1,0 +1,82 @@
+<style>
+    .tool-wrapper { background: var(--bg-card); border-radius: 16px; padding: 24px; border: 1px solid var(--border); }
+    .check-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 25px; }
+    
+    textarea { 
+        width: 100%; height: 350px; padding: 15px; border: 1px solid var(--border); 
+        border-radius: 12px; font-family: inherit; font-size: 14px; background: #fcfcfc;
+        resize: none; outline: none; transition: 0.2s;
+    }
+    textarea:focus { border-color: var(--accent); background: white; }
+
+    .analysis-panel { display: flex; flex-direction: column; gap: 15px; }
+    .finding-card { 
+        padding: 15px; border-radius: 10px; border-left: 4px solid var(--border);
+        background: var(--bg-site); font-size: 13px;
+    }
+    .finding-card.active { border-left-color: var(--accent); background: #eff6ff; }
+    .finding-card h5 { margin: 0 0 5px; text-transform: uppercase; font-size: 11px; color: var(--text-muted); }
+    .finding-card p { margin: 0; font-weight: 600; color: var(--primary); }
+
+    .scan-btn { 
+        width: 100%; margin-top: 15px; padding: 15px; background: var(--primary); 
+        color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer;
+    }
+    .scan-btn:hover { background: var(--accent); }
+</style>
+
+<div class="tool-wrapper">
+    <div class="check-grid">
+        <div class="input-area">
+            <h3 style="margin-top:0; font-size:18px;">Lease Text</h3>
+            <textarea id="leaseInput" placeholder="Paste the lease agreement text here to scan for key clauses..."></textarea>
+            <button class="scan-btn" onclick="scanLease()">🔍 Scan Agreement</button>
+        </div>
+
+        <div class="analysis-panel" id="analysisResults">
+            <div class="finding-card">
+                <h5>Deposit Rules</h5>
+                <p id="res-deposit">Not yet scanned</p>
+            </div>
+            <div class="finding-card">
+                <h5>Notice Period</h5>
+                <p id="res-notice">Not yet scanned</p>
+            </div>
+            <div class="finding-card">
+                <h5>Late Fee Policy</h5>
+                <p id="res-late">Not yet scanned</p>
+            </div>
+            <div class="finding-card">
+                <h5>Pet Policy</h5>
+                <p id="res-pets">Not yet scanned</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function scanLease() {
+        const text = document.getElementById('leaseInput').value.toLowerCase();
+        
+        const patterns = {
+            deposit: /(deposit|security|bond).{0,50}(\$|amount|total)/,
+            notice: /(notice|terminate|days).{0,50}(days|weeks|months)/,
+            late: /(late|fee|penalty|grace).{0,50}(\$|%|charge)/,
+            pets: /(pet|animal|dog|cat).{0,50}(allow|prohibit|policy)/
+        };
+
+        for (let key in patterns) {
+            const match = text.match(patterns[key]);
+            const element = document.getElementById('res-' + key);
+            const card = element.parentElement;
+
+            if (match) {
+                element.innerText = "⚠️ Clause Found: Review lines near '" + match[1] + "'";
+                card.classList.add('active');
+            } else {
+                element.innerText = "No specific clause detected.";
+                card.classList.remove('active');
+            }
+        }
+    }
+</script>
