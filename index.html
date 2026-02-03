@@ -6,152 +6,32 @@
     <title>ProSuite | Unified Business Tools</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* MARK IV DESIGN SYSTEM */
         :root {
-            --primary: #0f172a;    /* Midnight Slate */
-            --accent: #2563eb;     /* Royal Blue */
-            --success: #10b981;    /* Emerald */
-            --bg-site: #f8fafc;    /* Light Slate */
-            --bg-card: #ffffff;
-            --border: #e2e8f0;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --sidebar-width: 280px;
+            --primary: #0f172a; --accent: #2563eb; --success: #10b981;
+            --bg-site: #f8fafc; --bg-card: #ffffff; --border: #e2e8f0;
+            --text-main: #1e293b; --text-muted: #64748b; --sidebar-width: 280px;
         }
-
         * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-site); color: var(--text-main); margin: 0; display: flex; height: 100vh; overflow: hidden; }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-site);
-            color: var(--text-main);
-            margin: 0;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
+        /* Sidebar */
+        .sidebar { width: var(--sidebar-width); background: var(--primary); color: white; display: flex; flex-direction: column; }
+        .sidebar-header { padding: 30px 24px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .nav-container { flex: 1; overflow-y: auto; padding: 20px 12px; }
+        .nav-group { margin-bottom: 24px; }
+        .nav-label { font-size: 11px; text-transform: uppercase; color: rgba(255,255,255,0.4); padding: 0 12px 8px; display: block; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px; color: rgba(255,255,255,0.7); border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: 0.2s; }
+        .nav-item:hover { background: rgba(255,255,255,0.05); color: white; }
+        .nav-item.active { background: var(--accent); color: white; }
 
-        /* --- SIDEBAR NAVIGATION --- */
-        .sidebar {
-            width: var(--sidebar-width);
-            background: var(--primary);
-            color: white;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sidebar-header {
-            padding: 30px 24px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .brand-logo {
-            width: 40px;
-            height: 40px;
-            background: var(--accent);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 20px;
-        }
-
-        .nav-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px 12px;
-        }
-
-        .nav-group {
-            margin-bottom: 24px;
-        }
-
-        .nav-label {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: rgba(255,255,255,0.4);
-            padding: 0 12px 8px;
-            display: block;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            color: rgba(255,255,255,0.7);
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .nav-item:hover {
-            background: rgba(255,255,255,0.05);
-            color: white;
-        }
-
-        .nav-item.active {
-            background: var(--accent);
-            color: white;
-        }
-
-        /* --- MAIN VIEWPORT --- */
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        header {
-            height: 70px;
-            background: white;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 30px;
-        }
-
-        .tool-title h2 { margin: 0; font-size: 18px; font-weight: 600; }
-
-        .workspace {
-            flex: 1;
-            padding: 40px;
-            overflow-y: auto;
-            display: flex;
-            justify-content: center;
-        }
-
-        #active-tool-container {
-            width: 100%;
-            max-width: 900px;
-            animation: fadeIn 0.4s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Loader Animation */
-        .loading-spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--accent);
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 100px auto;
-        }
+        /* Content Area */
+        .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        header { height: 70px; background: white; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 30px; }
+        .workspace { flex: 1; padding: 40px; overflow-y: auto; display: flex; justify-content: center; }
+        #active-tool-container { width: 100%; max-width: 900px; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .loading-spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--accent); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 100px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
@@ -159,86 +39,70 @@
 
     <aside class="sidebar">
         <div class="sidebar-header">
-            <div class="brand-logo">P</div>
-            <div class="brand-name">
-                <div style="font-weight:700; font-size:16px;">ProSuite</div>
-                <div style="font-size:10px; color:rgba(255,255,255,0.5); text-transform:uppercase;">Business Ops</div>
-            </div>
+            <div style="font-weight:700; font-size:18px; letter-spacing:-0.5px;">ProSuite</div>
         </div>
 
         <nav class="nav-container">
             <div class="nav-group">
                 <span class="nav-label">The Data Lab</span>
-                <div class="nav-item" onclick="loadTool('smartcase')">✨ SmartCase Pro</div>
-                <div class="nav-item" onclick="loadTool('purge')">🚫 ListPurge</div>
+                <div class="nav-item" onclick="loadTool('smartcase', this)">✨ SmartCase Pro</div>
+                <div class="nav-item" onclick="loadTool('purge', this)">🚫 ListPurge</div>
+                <div class="nav-item" onclick="loadTool('csv', this)">📊 CSV Flow</div>
             </div>
 
             <div class="nav-group">
                 <span class="nav-label">The Property Hub</span>
-                <div class="nav-item" onclick="loadTool('guestconnect')">📶 GuestConnect</div>
-                <div class="nav-item" onclick="loadTool('yieldguard')">🚀 YieldGuard</div>
+                <div class="nav-item" onclick="loadTool('guestconnect', this)">📶 GuestConnect</div>
+                <div class="nav-item" onclick="loadTool('hostmanual', this)">📖 HostManual</div>
+                <div class="nav-item" onclick="loadTool('yieldguard', this)">📈 YieldGuard</div>
+                <div class="nav-item" onclick="loadTool('rentalvault', this)">🔐 RentalVault</div>
+                <div class="nav-item" onclick="loadTool('leasecheck', this)">⚖️ LeaseCheck</div>
+            </div>
+
+            <div class="nav-group">
+                <span class="nav-label">The Business Suite</span>
+                <div class="nav-item" onclick="loadTool('invoice', this)">📄 InvoiceGen</div>
+                <div class="nav-item" onclick="loadTool('prioritizer', this)">🎯 TaskPrioritizer</div>
+                <div class="nav-item" onclick="loadTool('margin', this)">💰 ProfitMargin</div>
+                <div class="nav-item" onclick="loadTool('brand', this)">🎨 BrandAssets</div>
             </div>
         </nav>
     </aside>
 
     <main class="main-content">
-        <header>
-            <div class="tool-title">
-                <h2 id="current-tool-name">Welcome</h2>
-            </div>
-        </header>
-
+        <header><h2 id="current-tool-name" style="font-size:18px; margin:0;">Welcome</h2></header>
         <section class="workspace">
             <div id="active-tool-container">
                 <div style="text-align:center; padding-top:100px; color:var(--text-muted);">
-                    <h3>Select a Tool to Begin</h3>
-                    <p>Your professional workspace is ready.</p>
+                    <h3>All Systems Operational</h3>
+                    <p>Select a tool from the sidebar to begin.</p>
                 </div>
             </div>
         </section>
     </main>
 
     <script>
-        // THE ROBUST PRO LOADER ENGINE
-        async function loadTool(toolFileName) {
+        async function loadTool(fileName, element) {
             const container = document.getElementById('active-tool-container');
             const title = document.getElementById('current-tool-name');
-            
-            // 1. Show Loading State
             container.innerHTML = '<div class="loading-spinner"></div>';
-            
-            // 2. Update Sidebar UI
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            if(event) event.currentTarget.classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            if(element) element.classList.add('active');
 
             try {
-                // 3. Fetch tool from /tools folder using relative path
-                const response = await fetch(`./tools/${toolFileName}.html`);
-                if (!response.ok) throw new Error('Tool not found');
-                const html = await response.text();
+                const response = await fetch(`./tools/${fileName}.html`);
+                if (!response.ok) throw new Error();
+                container.innerHTML = await response.text();
+                title.innerText = fileName.toUpperCase().replace(/-/g, ' ');
                 
-                // 4. Inject tool
-                container.innerHTML = html;
-                
-                // Clean up title display
-                title.innerText = toolFileName.charAt(0).toUpperCase() + toolFileName.slice(1).replace(/-/g, ' ');
-                
-                // 5. Execute scripts inside tool
                 const scripts = container.querySelectorAll('script');
-                scripts.forEach(oldScript => {
-                    const newScript = document.createElement('script');
-                    newScript.text = oldScript.text;
-                    document.body.appendChild(newScript).parentNode.removeChild(newScript);
+                scripts.forEach(old => {
+                    const newS = document.createElement('script');
+                    newS.text = old.text;
+                    document.body.appendChild(newS).parentNode.removeChild(newS);
                 });
-
             } catch (err) {
-                console.error(err);
-                container.innerHTML = `
-                    <div style="color:var(--text-muted); text-align:center; padding:50px; border:2px dashed var(--border); border-radius:16px;">
-                        <h3 style="color:var(--primary);">⚠️ Tool Not Found</h3>
-                        <p>We couldn't find <b>tools/${toolFileName}.html</b>.</p>
-                        <p style="font-size:12px;">Ensure you have uploaded the tool file to the /tools folder on GitHub.</p>
-                    </div>`;
+                container.innerHTML = '<div style="text-align:center; padding:50px;">⚠️ Error loading tool file.</div>';
             }
         }
     </script>
