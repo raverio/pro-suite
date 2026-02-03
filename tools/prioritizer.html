@@ -1,0 +1,73 @@
+<style>
+    .tool-wrapper { background: var(--bg-card); border-radius: 16px; padding: 24px; border: 1px solid var(--border); }
+    .matrix-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+    
+    .quadrant { padding: 15px; border-radius: 12px; min-height: 180px; border: 1px solid var(--border); transition: 0.2s; }
+    .quadrant h4 { margin: 0 0 10px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+    
+    /* Quadrant Colors */
+    .do { border-top: 4px solid #ef4444; background: #fffafb; } /* Important/Urgent */
+    .schedule { border-top: 4px solid #3b82f6; background: #f8fbff; } /* Important/Not Urgent */
+    .delegate { border-top: 4px solid #f59e0b; background: #fffcf5; } /* Not Important/Urgent */
+    .eliminate { border-top: 4px solid #64748b; background: #f8fafc; } /* Not Important/Not Urgent */
+
+    .task-input-row { display: flex; gap: 10px; margin-bottom: 20px; background: var(--bg-site); padding: 15px; border-radius: 12px; }
+    .task-input-row input { flex: 2; padding: 10px; border: 1px solid var(--border); border-radius: 6px; }
+    .task-input-row select { flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; }
+    .add-task-btn { padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; }
+
+    .task-pill { 
+        background: white; border: 1px solid var(--border); padding: 8px 12px; border-radius: 6px; 
+        margin-bottom: 8px; font-size: 13px; display: flex; justify-content: space-between; align-items: center;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+    .task-pill button { background: none; border: none; color: #cbd5e1; cursor: pointer; font-weight: bold; }
+    .task-pill button:hover { color: #ef4444; }
+</style>
+
+<div class="tool-wrapper">
+    <div class="task-input-row">
+        <input type="text" id="taskName" placeholder="Enter a new task...">
+        <select id="taskType">
+            <option value="do">Important & Urgent</option>
+            <option value="schedule">Important / Not Urgent</option>
+            <option value="delegate">Urgent / Not Important</option>
+            <option value="eliminate">Not Important / Not Urgent</option>
+        </select>
+        <button class="add-task-btn" onclick="addTask()">Add</button>
+    </div>
+
+    <div class="matrix-grid">
+        <div class="quadrant do" id="q-do">
+            <h4 style="color:#ef4444;">🔥 Do Immediately</h4>
+        </div>
+        <div class="quadrant schedule" id="q-schedule">
+            <h4 style="color:#3b82f6;">📅 Schedule / Plan</h4>
+        </div>
+        <div class="quadrant delegate" id="q-delegate">
+            <h4 style="color:#f59e0b;">👤 Delegate / Automate</h4>
+        </div>
+        <div class="quadrant eliminate" id="q-eliminate">
+            <h4 style="color:#64748b;">🗑️ Eliminate</h4>
+        </div>
+    </div>
+</div>
+
+<script>
+    function addTask() {
+        const nameInput = document.getElementById('taskName');
+        const typeInput = document.getElementById('taskType');
+        
+        if (!nameInput.value.trim()) return;
+
+        const taskPill = document.createElement('div');
+        taskPill.className = 'task-pill';
+        taskPill.innerHTML = `
+            <span>${nameInput.value}</span>
+            <button onclick="this.parentElement.remove()">×</button>
+        `;
+
+        document.getElementById('q-' + typeInput.value).appendChild(taskPill);
+        nameInput.value = "";
+    }
+</script>
